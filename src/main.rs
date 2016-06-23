@@ -29,9 +29,9 @@ fn make_a_request(website: &str) -> Vec<u8> {
 }
 
 fn make_html_file(incoming_vec: Vec<String>) -> io::Result<()> {
-    let all_markdown = Path::new("./websites/webpage.html");
+    let source_code = Path::new("./websites/webpage.html");
 
-    let mut buffer = try!(File::create(all_markdown));
+    let mut buffer = try!(File::create(source_code));
     try!(buffer.write_all(incoming_vec.join("\n").as_bytes()));
 
     Ok(())
