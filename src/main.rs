@@ -6,7 +6,7 @@ use std::io::prelude::*;
 use std::process::Command;
 
 fn main() {
-    make_html_file(split_it_up(make_a_request("URL_GOES_HERE"))).unwrap();
+    make_html_dir_and_file(split_it_up(make_a_request("URL_GOES_HERE"))).unwrap();
 }
 
 fn split_it_up(names: Vec<u8>) -> Vec<String> {
@@ -29,16 +29,19 @@ fn make_a_request(website: &str) -> Vec<u8> {
 }
 
 fn make_html_file(incoming_vec: Vec<String>) -> io::Result<()> {
-    if Path::new("./websites/").exists() {
-        return Ok(());
-    }
-
-    fs::create_dir("websites").unwrap();
-
     let all_markdown = Path::new("./websites/webpage.html");
 
     let mut buffer = try!(File::create(all_markdown));
     try!(buffer.write_all(incoming_vec.join("\n").as_bytes()));
 
     Ok(())
+}
+
+fn make_html_dir_and_file(incoming_vec: Vec<String>) -> io::Result<()> {
+    if Path::new("./websites/").exists() {
+        return make_html_file(incoming_vec);
+    }
+
+    fs::create_dir("./websites/").unwrap();
+    make_html_file(incoming_vec)
 }
