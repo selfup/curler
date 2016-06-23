@@ -1,4 +1,5 @@
 use std::io;
+use std::fs;
 use std::fs::File;
 use std::path::Path;
 use std::io::prelude::*;
@@ -28,6 +29,12 @@ fn make_a_request(website: &str) -> Vec<u8> {
 }
 
 fn make_html_file(incoming_vec: Vec<String>) -> io::Result<()> {
+    if Path::new("./websites").exists() {
+        return Ok(());
+    }
+
+    fs::create_dir("websites").unwrap();
+
     let all_markdown = Path::new("./websites/webpage.html");
 
     let mut buffer = try!(File::create(all_markdown));
